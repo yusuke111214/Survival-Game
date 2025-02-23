@@ -1,58 +1,63 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f; // 移動速度
-
-    private CharacterController characterController;
+    [SerializeField] private float speed = 5f; // 移動速度
     private Animator animator;
-    private Transform mainCam;
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        mainCam = Camera.main.transform;
     }
 
     void Update()
     {
-        // 入力取得（W, A, Dのみ有効にするため、垂直軸は負値を0にする）
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Mathf.Max(0, Input.GetAxisRaw("Vertical")); // Sキーによる負の値は無視
+        // Playerの前後左右の移動
+        float xMovement = Input.GetAxis("Horizontal") * speed * Time.deltaTime; // 左右の移動
+        float zMovement = Input.GetAxis("Vertical") * speed * Time.deltaTime; // 前後の移動
+        transform.Translate(xMovement, 0, zMovement); // オブジェクトの位置を更新
 
-        // カメラの向きを基準に移動方向を計算する
-        Vector3 camForward = mainCam.forward;
-        camForward.y = 0;
-        camForward.Normalize();
+        //マウスカーソルで左右視点移動
+        float mx = Input.GetAxis("Mouse X");//カーソルの横の移動量を取得
 
-        Vector3 camRight = mainCam.right;
-        camRight.y = 0;
-        camRight.Normalize();
+        if (Mathf.Abs(mx) > 0.001f) // X方向に一定量移動していれば横回転
+        {
+            transform.RotateAround(transform.position, Vector3.up, mx); // 回転軸はplayerオブジェクトのワールド座標Y軸
 
-        Vector3 moveInput = camForward * vertical + camRight * horizontal;
-        Vector3 moveDirection = moveInput.normalized;
+        }
 
-        // 入力がほぼゼロなら Idle
-        if(moveDirection.sqrMagnitude < 0.01f)
+        // もしキー入力がない場合は Idle アニメーションを再生
+        if (Mathf.Abs(xMovement) < 0.01f && Mathf.Abs(zMovement) < 0.01f)
         {
             animator.Play("Idle");
-            return;
         }
 
-        // 入力に応じたアニメーションを決定
-        // ここでは、WキーでRunForward、AでRunLeft、DでRunRightとします
-        string stateToPlay = "RunForward";
-        if(Mathf.Abs(horizontal) > 0.1f && vertical < 0.1f)
+        else
         {
-            stateToPlay = horizontal > 0 ? "RunLeft" : "RunRight";
-        }
-        // Wキーが押されている場合は基本RunForward（左右微調整はカメラの回転に任せる）
-        animator.Play(stateToPlay);
+            // 入力に応じたアニメーションを決定
+            // ここでは、WキーでRunForward、AでRunLeft、DでRunRightとします
+            string stateToPlay = "RunForward";
 
-        // 移動処理：CharacterControllerを利用
-        characterController.Move(moveDirection * speed * Time.deltaTime);
+            // Wキーが押されている（正のvertical入力がある）場合は常に RunForward
+            if (zMovement > 0.01f)
+            {
+                stateToPlay = "RunForward";
+            }
+            else
+            {
+                // Wキーが押されていない状態でAまたはDキーが押されている場合
+                if (xMovement < 0.01f)
+                {
+                    stateToPlay = "RunRight";
+                }
+                else if (xMovement > -0.01f)
+                {
+                    stateToPlay = "RunLeft";
+                }
+            }
+            // Wキーが押されている場合は基本RunForward（左右微調整はカメラの回転に任せる）
+            animator.Play(stateToPlay);
+        }
     }
 }
