@@ -4,7 +4,6 @@ using UnityEngine;
 public class PlayerPlefs : MonoBehaviour
 {
     public static PlayerPlefs Instance { get; private set; }
-
     private Dictionary<ItemType, int> pickedItems = new Dictionary<ItemType, int>();
 
     void Awake()
@@ -20,7 +19,6 @@ public class PlayerPlefs : MonoBehaviour
         }
     }
 
-    // アイテムを追加する
     public void AddItem(ItemType type, int count)
     {
         if (pickedItems.ContainsKey(type))

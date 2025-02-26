@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -10,22 +11,25 @@ public class InventoryManager : MonoBehaviour
     private int usedSlots = 0;
 
     [Header("UI Hand Slots")]
-    [SerializeField] private Image[] handSlotImages; // 画面下部の手の Image（サイズは totalSlots 個）
+    [SerializeField] private Image[] handSlotImages; // 画面下部の手の Image
 
     [Header("Item Data")]
     [SerializeField] private InventoryItemData[] availableItemData; // 各アイテムの slotCost とアイコン
-    [SerializeField] private Sprite emptySlotIcon; // 空のスロットのアイコン
+
+    [Header("Empty Slot Icon")]
+    [SerializeField] private Sprite emptySlotIcon;
+
+    // 一時在庫：プレイヤーが拾ったアイテム（まだ預けていない）の個数を保持（1個単位）
+    private Dictionary<ItemType, int> temporaryInventory = new Dictionary<ItemType, int>();
 
     void Awake()
     {
-        // シングルトンパターン
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
     }
 
-    // アイテムのデータを返す
     private InventoryItemData GetItemData(ItemType type)
     {
         foreach (var data in availableItemData)
@@ -36,15 +40,8 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-    // アイテムが拾えるかどうかを判定
-    public bool CanPickup(ItemType type)
-    {
-        InventoryItemData data = GetItemData(type);
-        if (data == null) return false;
-        return (usedSlots + data.slotCost) <= totalSlots;
-    }
-
-    // アイテムを拾おうとしたときに呼び出す。成功すればtrue、在庫不足ならfalseを返す。
+    // アイテムを拾おうとする。成功すれば true、失敗なら false を返す。
+    // このメソッドでは、UI上の在庫（usedSlots）を消費し、temporaryInventory に 1 個分を記録する。
     public bool TryPickup(ItemType type)
     {
         InventoryItemData data = GetItemData(type);
@@ -55,35 +52,46 @@ public class InventoryManager : MonoBehaviour
         }
         if (usedSlots + data.slotCost > totalSlots)
         {
-            // 在庫が足りない場合は拾えない
             Debug.Log("Cannot pick up " + type + ": Not enough inventory space.");
             return false;
         }
-        
-        // 在庫更新：左から順に手のスロットにアイコンを設定
-        for (int i = usedSlots; i < usedSlots + data.slotCost; i++)
+
+        // 在庫の使用量を更新
+        int startIndex = usedSlots;
+        usedSlots += data.slotCost;
+
+        // temporaryInventory に 1 追加（実際のアイテム数は 1 個単位）
+        if (temporaryInventory.ContainsKey(type))
+            temporaryInventory[type]++;
+        else
+            temporaryInventory[type] = 1;
+
+        // UI の更新：使ったスロットにアイコンを表示
+        for (int i = startIndex; i < usedSlots; i++)
         {
             if (i < handSlotImages.Length)
             {
                 handSlotImages[i].sprite = data.icon;
-                handSlotImages[i].color = Color.white; // 色を通常に
+                handSlotImages[i].color = Color.white;
             }
-        }
-        usedSlots += data.slotCost;
-        // PlayerPlefs にも追加する
-        if (PlayerPlefs.Instance != null)
-        {
-            PlayerPlefs.Instance.AddItem(type, data.slotCost);
         }
         return true;
     }
 
-    // アイテム預け（Deposit）の処理：在庫があればクリアして、UIをリセットする
+    // アイテム預けの処理（Deposit）
     public void DepositItems()
     {
         if (usedSlots > 0)
         {
             Debug.Log("Depositing items into shelter.");
+            // temporaryInventory の内容を PlayerPlefs に転送
+            foreach (var kvp in temporaryInventory)
+            {
+                // 各アイテムの個数をそのまま追加
+                PlayerPlefs.Instance.AddItem(kvp.Key, kvp.Value);
+            }
+            // 一時在庫と UI 在庫をクリアする
+            temporaryInventory.Clear();
             ClearInventory();
         }
         else
@@ -92,13 +100,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // 在庫クリア（UIの手のスロットを空にし、usedSlotsを0にする）
+    // 在庫クリア（UI更新）
     public void ClearInventory()
     {
         usedSlots = 0;
         for (int i = 0; i < handSlotImages.Length; i++)
         {
             handSlotImages[i].sprite = emptySlotIcon;
+            handSlotImages[i].color = Color.white;
         }
     }
 }
