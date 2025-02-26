@@ -5,6 +5,7 @@ public class PickupableItem : MonoBehaviour
 {
     // ここではアウトライン効果を制御するコンポーネント（例：QuickOutlineなど）を参照する想定です。
     [SerializeField] private Outline outline; 
+    [SerializeField] private ItemType itemType; // アイテムの種類
 
     // プレイヤーが近くにいるかどうかを保持するフラグ
     private bool isPlayerNear = false;
@@ -48,10 +49,17 @@ public class PickupableItem : MonoBehaviour
 
     void Update()
     {
-        // プレイヤーが近くにいる状態で左クリック（Mouse0）を押されたらアイテムを取得（非表示にする）
         if (isPlayerNear && Input.GetMouseButtonDown(0))
         {
-            PickUp();
+            // アイテムを拾おうとする前に、インベントリに空きがあるか確認
+            if (InventoryManager.Instance.TryPickup(itemType))
+            {
+                PickUp();
+            }
+            else
+            {
+                Debug.Log("Cannot pick up " + itemType + ": Not enough free slots.");
+            }
         }
     }
 

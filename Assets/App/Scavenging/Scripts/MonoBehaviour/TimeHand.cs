@@ -8,6 +8,9 @@ public class TimerHand : MonoBehaviour
     [SerializeField] private RectTransform clockHand;
     [SerializeField] private Image redArcImage; 
 
+    // 外部から残り時間を参照できるプロパティ
+    public float RemainingTime { get { return remainingTime; } }
+
     void Start()
     {
         remainingTime = totalTime;
