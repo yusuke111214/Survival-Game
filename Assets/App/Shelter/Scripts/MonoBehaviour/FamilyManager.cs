@@ -1,11 +1,11 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class FamilyManager : MonoBehaviour
 {
     public static FamilyManager Instance { get; private set; }
-    
-    // Inspector から家族メンバー（FamilyMemberStatus コンポーネントを持つオブジェクト）を追加します
+
+    // Inspector で家族メンバー（FamilyMemberStatus コンポーネントを持つオブジェクト）を登録する
     [SerializeField] private List<FamilyMemberStatus> familyMembers = new List<FamilyMemberStatus>();
 
     void Awake()
@@ -21,10 +21,7 @@ public class FamilyManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
-    /// <summary>
-    /// 家族の中からランダムに１人を返します。
-    /// </summary>
+
     public FamilyMemberStatus GetRandomMember()
     {
         if (familyMembers == null || familyMembers.Count == 0)
@@ -35,7 +32,7 @@ public class FamilyManager : MonoBehaviour
         int index = Random.Range(0, familyMembers.Count);
         return familyMembers[index];
     }
-    
+
     public void SetRandomMemberInfectedEarly()
     {
         FamilyMemberStatus member = GetRandomMember();
@@ -51,6 +48,30 @@ public class FamilyManager : MonoBehaviour
         if (member != null)
         {
             member.SetFatigued(true);
+        }
+    }
+
+    /// <summary>
+    /// 家族の中で、父と母が両方死亡しているかを返す（リストの先頭2要素が父・母と仮定）
+    /// </summary>
+    public bool IsFatherAndMotherDead()
+    {
+        if (familyMembers.Count < 2)
+        {
+            Debug.LogWarning("FamilyManager: FatherまたはMotherの登録が不足しています。");
+            return false;
+        }
+        return familyMembers[0].IsDead && familyMembers[1].IsDead;
+    }
+
+    /// <summary>
+    /// 家族メンバーの表示状態を更新する。死亡しているメンバーは非表示にする。
+    /// </summary>
+    public void UpdateFamilyVisibility()
+    {
+        foreach (var member in familyMembers)
+        {
+            member.gameObject.SetActive(!member.IsDead);
         }
     }
 }

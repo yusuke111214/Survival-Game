@@ -127,21 +127,21 @@ public class SupplySelectionPanel : MonoBehaviour
         {
             foreach (var itemType in itemTypes)
             {
-                bool isSelected = selectionState[(i, itemType)];
-                Button btn = buttonRefs[(i, itemType)];
+                bool isSelected;
+                // キーが存在しなければ、false として処理（これで例外は回避）
+                if (!selectionState.TryGetValue((i, itemType), out isSelected))
+                    continue;
 
-                if (btn == null) continue;
+                if (!buttonRefs.TryGetValue((i, itemType), out Button btn))
+                    continue;
 
-                // ボタンのビジュアル(α)を変更
                 UpdateButtonVisual(btn, isSelected);
-
-                // 在庫が 0 かつ未選択の場合は interactable = false
-                // 選択中なら在庫が 0 でも interactable = true にする (解除できるように)
                 bool canInteract = (tempInventory[itemType] > 0 || isSelected);
                 btn.interactable = canInteract;
             }
         }
     }
+
 
     private void UpdateButtonVisual(Button btn, bool selected)
     {
