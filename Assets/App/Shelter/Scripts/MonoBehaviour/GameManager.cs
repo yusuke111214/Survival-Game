@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
         fadePanel.color = panelColor;
         fadePanel.gameObject.SetActive(false);
         // 必要に応じてdayTextも非表示にする（またはそのまま表示する）
-        // dayText.gameObject.SetActive(false);
+        dayText.gameObject.SetActive(false);
     }
 
     /// <summary>

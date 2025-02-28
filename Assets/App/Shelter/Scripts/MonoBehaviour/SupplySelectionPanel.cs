@@ -2,19 +2,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 /// <summary>
-/// 物資供給用パネル：家族メンバー × アイテムの選択を行い、最終的に在庫を消費＆ステータスを更新する。
+/// 物資供給用パネル：家族メンバー × アイテムの選択を行い、当日中は「仮決定」を記憶しておき、
+/// 一日が終わるときにまとめて確定する。
 /// </summary>
 public class SupplySelectionPanel : MonoBehaviour
 {
     [Header("Family Members UI")]
-    [SerializeField] private FamilyMemberUI[] familyMembers; 
-    // ※ Inspector で父、母、息子の3要素を設定する
-    //   各要素に FamilyMemberStatus とアイテムボタン5種類をアサイン
+    [SerializeField] private FamilyMemberUI[] familyMembers;
 
-    [Header("Confirm Button")]
-    [SerializeField] private Button confirmButton; // 「Next」に相当するボタン
+    [Header("Button")]
+    [SerializeField] private Button backButton;
+    [SerializeField] private Button nextButton;
+
+    // 仮決定の選択状態を (メンバーIndex, ItemType) -> bool で管理
+    private Dictionary<(int memberIndex, ItemType item), bool> selectionState =
+        new Dictionary<(int, ItemType), bool>();
+
+    // 日中は在庫を消費しない。あくまで「選択できるかどうか」チェックのための一時カウンタ
+    private Dictionary<ItemType, int> tempInventory = new Dictionary<ItemType, int>();
+
+    // ボタン参照：(メンバーIndex, ItemType) -> Button
+    private Dictionary<(int, ItemType), Button> buttonRefs = new Dictionary<(int, ItemType), Button>();
 
     // アイテムの種類一覧
     private readonly ItemType[] itemTypes = {
@@ -25,47 +34,35 @@ public class SupplySelectionPanel : MonoBehaviour
         ItemType.Syringe
     };
 
-    // 選択状態を (メンバーIndex, ItemType) -> bool で管理
-    private Dictionary<(int memberIndex, ItemType item), bool> selectionState =
-        new Dictionary<(int, ItemType), bool>();
-
-    // 在庫を一時的に扱う辞書
-    private Dictionary<ItemType, int> tempInventory = new Dictionary<ItemType, int>();
-
-    // ボタン参照：(メンバーIndex, ItemType) -> Button
-    private Dictionary<(int, ItemType), Button> buttonRefs =
-        new Dictionary<(int, ItemType), Button>();
-
     void Start()
     {
-        // confirmButton 押下時の処理
-        if (confirmButton != null)
-            confirmButton.onClick.AddListener(OnConfirmButton);
+        if (backButton != null)
+            backButton.onClick.AddListener(OnBackClicked);
+        if (nextButton != null)
+            nextButton.onClick.AddListener(OnNextClicked);
 
-        // familyMembers の各アイテムボタンを、(index, itemType) の辞書に登録
+        // 各アイテムボタンを登録
         for (int i = 0; i < familyMembers.Length; i++)
         {
-            RegisterButton(i, ItemType.Water,     familyMembers[i].waterButton);
-            RegisterButton(i, ItemType.Food,      familyMembers[i].foodButton);
-            RegisterButton(i, ItemType.MedicalKit,familyMembers[i].medKitButton);
-            RegisterButton(i, ItemType.Gauze,     familyMembers[i].gauzeButton);
-            RegisterButton(i, ItemType.Syringe,   familyMembers[i].syringeButton);
+            RegisterButton(i, ItemType.Water,      familyMembers[i].waterButton);
+            RegisterButton(i, ItemType.Food,       familyMembers[i].foodButton);
+            RegisterButton(i, ItemType.MedicalKit, familyMembers[i].medKitButton);
+            RegisterButton(i, ItemType.Gauze,      familyMembers[i].gauzeButton);
+            RegisterButton(i, ItemType.Syringe,    familyMembers[i].syringeButton);
         }
     }
 
-    /// <summary>
-    /// OnEnable()：パネルが表示されるたびに在庫のコピーやボタン状態を初期化する
-    /// </summary>
+    // パネルが表示されるたびに、選択状態などを初期化
     void OnEnable()
     {
-        // 1) PlayerPlefs の在庫をコピー
+        // (1) tempInventoryをPlayerPlefsからコピー
         tempInventory.Clear();
         foreach (ItemType t in System.Enum.GetValues(typeof(ItemType)))
         {
             tempInventory[t] = PlayerPlefs.Instance.GetItemCount(t);
         }
 
-        // 2) selectionState を false で初期化
+        // (2) selectionStateをクリア
         selectionState.Clear();
         for (int i = 0; i < familyMembers.Length; i++)
         {
@@ -75,96 +72,91 @@ public class SupplySelectionPanel : MonoBehaviour
             }
         }
 
-        // 3) ボタンの初期ビジュアルを更新
+        // (3) ボタンの初期ビジュアル更新
         UpdateAllButtons();
     }
 
-    /// <summary>
-    /// ボタンを登録し、クリック時に ToggleItemSelection を呼ぶ
-    /// </summary>
+    private void OnBackClicked()
+    {
+        // 例: Back押すと HealthSummaryへ戻る
+        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.HealthSummary);
+    }
+
+    private void OnNextClicked()
+    {
+        // 例: Next押すと InvestigationSelection へ
+        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.InvestigationSelection);
+    }
+
     private void RegisterButton(int memberIndex, ItemType itemType, Button btn)
     {
         if (btn == null) return;
-        // 登録
         buttonRefs[(memberIndex, itemType)] = btn;
-        // リスナー
         btn.onClick.AddListener(() => ToggleItemSelection(memberIndex, itemType));
     }
 
-    /// <summary>
-    /// (memberIndex, itemType) のボタンを押したとき、選択/解除を切り替える。
-    /// </summary>
     private void ToggleItemSelection(int memberIndex, ItemType itemType)
     {
         bool current = selectionState[(memberIndex, itemType)];
         if (current)
         {
-            // すでに選択中なら解除
+            // 選択解除
             selectionState[(memberIndex, itemType)] = false;
-            // 在庫を1戻す
             tempInventory[itemType] += 1;
         }
         else
         {
-            // 未選択なら選択したい
-            // 在庫がなければ選択不可
-            if (tempInventory[itemType] <= 0) return;
-
-            // 在庫を1消費
-            tempInventory[itemType] -= 1;
+            if (tempInventory[itemType] <= 0) return; // 在庫なしなら選択不能
             selectionState[(memberIndex, itemType)] = true;
+            tempInventory[itemType] -= 1;
         }
-        // 更新
         UpdateAllButtons();
     }
 
-    /// <summary>
-    /// 全ボタンのビジュアル・interactable 状態を更新する
-    /// </summary>
     private void UpdateAllButtons()
     {
         for (int i = 0; i < familyMembers.Length; i++)
         {
             foreach (var itemType in itemTypes)
             {
-                bool isSelected;
-                // キーが存在しなければ、false として処理（これで例外は回避）
-                if (!selectionState.TryGetValue((i, itemType), out isSelected))
-                    continue;
+                bool isSelected = false;
+                selectionState.TryGetValue((i, itemType), out isSelected);
 
-                if (!buttonRefs.TryGetValue((i, itemType), out Button btn))
+                Button btn;
+                if (!buttonRefs.TryGetValue((i, itemType), out btn)) 
                     continue;
 
                 UpdateButtonVisual(btn, isSelected);
+
+                // 選択可能かどうか（tempInventoryがある or 既に選択済み）
                 bool canInteract = (tempInventory[itemType] > 0 || isSelected);
                 btn.interactable = canInteract;
             }
         }
     }
 
-
     private void UpdateButtonVisual(Button btn, bool selected)
     {
         if (btn == null) return;
-        Color c = btn.image.color;
-        c.a = selected ? 1f : 0.4f; // 選択中は不透明、未選択は半透明
+        var c = btn.image.color;
+        c.a = selected ? 1f : 0.4f;
         btn.image.color = c;
     }
 
     /// <summary>
-    /// 「Next」ボタンを押した際、選択を確定してアイテムを消費し、家族ステータスを更新。
-    /// その後、DiaryManager.OnSupplySelectionCompleted() を呼ぶ。
+    /// 一日が終わる際に呼ばれて、選択された分の在庫を実際に消費 & 家族ステータスを更新する。
+    /// DiaryManager or GameManager の EndDay() などから呼ばれることを想定。
     /// </summary>
-    private void OnConfirmButton()
+    public void FinalizeSupplySelection()
     {
-        // 1) 選択された分だけ本物の PlayerPlefs の在庫を消費
+        // ここで実際にPlayerPlefsから在庫を消費し、家族ステータスを更新
         for (int i = 0; i < familyMembers.Length; i++)
         {
             foreach (var itemType in itemTypes)
             {
                 if (selectionState[(i, itemType)])
                 {
-                    // 在庫を1減らす (最終確定)
+                    // 在庫を1減らす
                     PlayerPlefs.Instance.AddItem(itemType, -1);
 
                     // 家族メンバーにアイテムを与える
@@ -172,20 +164,8 @@ public class SupplySelectionPanel : MonoBehaviour
                 }
             }
         }
-
-        // 2) パネルを閉じ、DiaryManager に通知
-        gameObject.SetActive(false);
-
-        var diary = FindObjectOfType<DiaryManager>();
-        if (diary != null)
-        {
-            diary.OnSupplySelectionCompleted();
-        }
     }
 
-    /// <summary>
-    /// ItemType ごとに FamilyMemberStatus のステータスを更新
-    /// </summary>
     private void ApplyItemToStatus(FamilyMemberStatus status, ItemType itemType)
     {
         switch (itemType)
@@ -204,8 +184,6 @@ public class SupplySelectionPanel : MonoBehaviour
                 break;
             case ItemType.Syringe:
                 status.GiveSyringe();
-                break;
-            default:
                 break;
         }
     }

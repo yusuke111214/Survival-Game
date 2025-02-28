@@ -26,9 +26,11 @@ public class InvestigationSelectionPanel : MonoBehaviour
     [SerializeField] private Sprite medicalBookSprite; // 医療本(Book)
     [SerializeField] private Sprite hammerSprite;      // ハンマー
 
-    [Header("Door Button (toggle)")]
+    [Header("Button (toggle)")]
     [SerializeField] private Button doorButton;        // ドアボタン（半透明=行かない、不透明=行く）
     [SerializeField] private Sprite doorSprite;        // ドア画像そのものは同じでもOK
+    [SerializeField] private Button backButton;
+    [SerializeField] private Button nextButton;
 
     // 内部状態
     private int selectedMemberIndex = -1;    // 0=父,1=母,2=息子, -1=未選択
@@ -55,6 +57,8 @@ public class InvestigationSelectionPanel : MonoBehaviour
         fatherButton.onClick.AddListener(() => OnCharacterButtonClicked(0));
         motherButton.onClick.AddListener(() => OnCharacterButtonClicked(1));
         sonButton.onClick.AddListener(() => OnCharacterButtonClicked(2));
+        backButton.onClick.AddListener(OnBackClicked);
+        nextButton.onClick.AddListener(OnNextClicked);
 
         if (itemCycleButton != null)
             itemCycleButton.onClick.AddListener(OnItemCycleButtonClicked);
@@ -158,6 +162,27 @@ public class InvestigationSelectionPanel : MonoBehaviour
             var button = (i == 0) ? fatherButton : (i == 1) ? motherButton : sonButton;
             float alpha = (i == memberIndex) ? 1f : 0.4f;
             SetButtonAlpha(button, alpha);
+        }
+    }
+
+    private void OnBackClicked()
+    {
+        // 例: Backで SupplySelection に戻る
+        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.SupplySelection);
+    }
+
+    private void OnNextClicked()
+    {
+        // 調査するかしないかのチェックなどを行い、
+        // イベントがあるなら EventPopup、ないなら EndOfDay
+        bool hasEvent = EventManager.Instance.HasEventToday();
+        if (hasEvent)
+        {
+            DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.EventPopup);
+        }
+        else
+        {
+            DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.EndOfDay);
         }
     }
 

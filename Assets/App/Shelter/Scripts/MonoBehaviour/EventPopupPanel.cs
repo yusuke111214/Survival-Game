@@ -8,7 +8,8 @@ public class EventPopupPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI eventText;    // イベント内容表示用テキスト
     [SerializeField] private Button yesButton;             // ○ボタン
     [SerializeField] private Button noButton;              // ×ボタン
-    [SerializeField] private Button nextButton;            // Nextボタン（初期は非表示）
+    [SerializeField] private Button backButton;
+    [SerializeField] private Button nextButton;
 
     // 内部定数：選択状態のα値
     private const float ALPHA_SELECTED = 1f;
@@ -27,6 +28,7 @@ public class EventPopupPanel : MonoBehaviour
         yesButton.onClick.AddListener(OnYesButtonClicked);
         noButton.onClick.AddListener(OnNoButtonClicked);
         nextButton.onClick.AddListener(OnNextButtonClicked);
+        backButton.onClick.AddListener(OnBackButtonClicked);
         nextButton.gameObject.SetActive(false);
     }
 
@@ -65,9 +67,13 @@ public class EventPopupPanel : MonoBehaviour
         // 結果処理を実行
         bool choice = userChoice.Value;
         EventOutcomeProcessor.Instance.ProcessEventOutcome(currentEventType, choice);
-        // パネルを非表示にし、DiaryManagerへ通知
-        gameObject.SetActive(false);
         OnEventPopupCompleted?.Invoke();
+        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.EndOfDay);
+    }
+
+    private void OnBackButtonClicked()
+    {
+        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.InvestigationSelection);
     }
 
     private void UpdateUI()
