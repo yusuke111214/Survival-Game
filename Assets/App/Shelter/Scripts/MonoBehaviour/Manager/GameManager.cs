@@ -103,8 +103,11 @@ public class GameManager : MonoBehaviour
          dayText.gameObject.SetActive(true);
       }
 
-        // 調査管理の進捗更新
-        InvestigationManager.Instance.AdvanceDay();
+      // 調査管理の進捗更新
+      InvestigationManager.Instance.AdvanceDay();
+
+      // 一日の終了時に、すべての家族メンバーの健康状態を更新する
+    　FamilyManager.Instance.AdvanceDayForAll();
 
       // 暗転中に家族の死亡状態を反映
       FamilyManager.Instance.UpdateFamilyVisibility();

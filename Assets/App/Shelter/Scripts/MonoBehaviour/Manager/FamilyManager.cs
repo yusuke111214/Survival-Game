@@ -80,4 +80,13 @@ public class FamilyManager : MonoBehaviour
         }
         return familyMembers[0].IsDead && familyMembers[1].IsDead;
     }
+
+    public void AdvanceDayForAll()
+    {
+        foreach (var member in familyMembers)
+        {
+            member.AdvanceDay();
+        }
+    }
+
 }
