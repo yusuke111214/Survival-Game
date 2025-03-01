@@ -103,6 +103,9 @@ public class GameManager : MonoBehaviour
          dayText.gameObject.SetActive(true);
       }
 
+        // 調査管理の進捗更新
+        InvestigationManager.Instance.AdvanceDay();
+
       // 暗転中に家族の死亡状態を反映
       FamilyManager.Instance.UpdateFamilyVisibility();
 

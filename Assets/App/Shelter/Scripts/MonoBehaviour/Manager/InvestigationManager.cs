@@ -142,9 +142,6 @@ public class InvestigationManager : MonoBehaviour
             data.member.SetInfectedEarly(true);
         }
 
-        // キャラを再表示
-        data.member.gameObject.SetActive(true);
-
         // 調査から帰還したので、調査中フラグを解除し、メンバーを再表示
         data.member.IsOnInvestigation = false;
         data.member.gameObject.SetActive(true);

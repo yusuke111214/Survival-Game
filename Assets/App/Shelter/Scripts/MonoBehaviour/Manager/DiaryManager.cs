@@ -125,9 +125,16 @@ public class DiaryManager : MonoBehaviour
     {
         Debug.Log("一日が終了します。");
         GameManager.Instance.EndDay();
+        
         // SupplySelectionPanel, InvestigationPanel の確定処理を呼ぶ
         supplySelectionPanel.GetComponent<SupplySelectionPanel>().FinalizeSupplySelection();
-        investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
+
+        // 調査中がある場合は、調査パネルの確定処理を呼ばない
+        if (!InvestigationManager.Instance.IsAnyInvestigationActive())
+        {
+            investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
+        }
+
         HideAllPanels();
         if (diaryPanel != null)
             diaryPanel.SetActive(false);
