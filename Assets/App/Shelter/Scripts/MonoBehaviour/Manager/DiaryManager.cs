@@ -1,20 +1,16 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// 日記全体の管理。ただし「Next/Backボタンでフェーズを進める」ロジックは削除し、
-/// 各パネルから DiaryManager.SetPhase(...) を呼ぶ形に変更する。
-/// </summary>
 public class DiaryManager : MonoBehaviour
 {
     public enum DiaryPhase
     {
-        EventResult,      
-        HealthSummary,    
-        SupplySelection,  
-        InvestigationSelection,
-        EventPopup,       
-        EndOfDay          
+        EventResult,          // 前日のイベント結果
+        HealthSummary,        // 家族の健康状態
+        SupplySelection,      // 物資供給選択
+        InvestigationSelection, // 調査候補者選択
+        EventPopup,           // イベント選択（○×ポップアップ）
+        EndOfDay              // 次の日へ進行
     }
 
     [Header("Panel References")]
@@ -26,10 +22,11 @@ public class DiaryManager : MonoBehaviour
     [SerializeField] private GameObject diaryPanel;
 
     [Header("Dynamic Text Components")]
-    [SerializeField] private TextMeshProUGUI diaryText;
-    [SerializeField] private EventResultText eventResultTextComponent; 
-    [SerializeField] private HealthSummaryText healthSummaryTextComponent; 
-    [SerializeField] private EventText eventTextComponent;  
+    [SerializeField] private TextMeshProUGUI eventDiaryText;  
+    [SerializeField] private TextMeshProUGUI healthDiaryText;   
+    [SerializeField] private EventResultText eventResultTextComponent;
+    [SerializeField] private HealthSummaryText healthSummaryTextComponent;
+    [SerializeField] private EventText eventTextComponent;
 
     private DiaryPhase currentPhase = DiaryPhase.EventResult;
 
@@ -37,14 +34,15 @@ public class DiaryManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
     }
 
     void Start()
     {
         HideAllPanels();
-        // （共通Next/Backボタンはもう使わないなら削除 or Inspectorで外しておく）
     }
 
     /// <summary>
@@ -60,7 +58,7 @@ public class DiaryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 日記を開く
+    /// 日記を開く（DailyPanel をアクティブにする）
     /// </summary>
     public void ShowDiary()
     {
@@ -70,7 +68,7 @@ public class DiaryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// フェーズをセットし、対応パネルを表示する。
+    /// フェーズをセットし、対応パネルを表示する
     /// </summary>
     public void SetPhase(DiaryPhase newPhase)
     {
@@ -79,7 +77,7 @@ public class DiaryManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 各フェーズごとのパネル表示を行う
+    /// 現在のフェーズに応じてパネルとテキストを更新する
     /// </summary>
     private void UpdateDiaryPhase()
     {
@@ -89,46 +87,37 @@ public class DiaryManager : MonoBehaviour
         {
             case DiaryPhase.EventResult:
                 if (eventResultPanel != null) eventResultPanel.SetActive(true);
-                if (diaryText != null && eventResultTextComponent != null)
+                if (eventDiaryText != null && eventResultTextComponent != null)
                 {
-                    diaryText.gameObject.SetActive(true);
-                    diaryText.text = "[前日のイベント結果]\n" + eventResultTextComponent.GetText();
+                    eventDiaryText.gameObject.SetActive(true);
+                    eventDiaryText.text = "[前日のイベント結果]\n" + eventResultTextComponent.GetText();
                 }
                 break;
-
             case DiaryPhase.HealthSummary:
                 if (healthSummaryPanel != null) healthSummaryPanel.SetActive(true);
-                if (diaryText != null && healthSummaryTextComponent != null)
+                if (healthDiaryText != null && healthSummaryTextComponent != null)
                 {
-                    diaryText.gameObject.SetActive(true);
-                    diaryText.text = "[家族の健康状態]\n" + healthSummaryTextComponent.GetText();
+                    healthDiaryText.gameObject.SetActive(true);
+                    healthDiaryText.text = "[家族の健康状態]\n" + healthSummaryTextComponent.GetText();
                 }
                 break;
-
             case DiaryPhase.SupplySelection:
                 if (supplySelectionPanel != null) supplySelectionPanel.SetActive(true);
-                if (diaryText != null) diaryText.gameObject.SetActive(false);
                 break;
-
             case DiaryPhase.InvestigationSelection:
                 if (investigationPanel != null) investigationPanel.SetActive(true);
-                if (diaryText != null) diaryText.gameObject.SetActive(false);
                 break;
-
             case DiaryPhase.EventPopup:
                 if (eventPopupPanel != null) eventPopupPanel.SetActive(true);
-                if (diaryText != null) diaryText.gameObject.SetActive(false);
                 break;
-
             case DiaryPhase.EndOfDay:
-                // 1日終了処理
                 EndDay();
                 break;
         }
     }
 
     /// <summary>
-    /// 実際に一日が終了するときに呼ばれる
+    /// 一日の終了処理
     /// </summary>
     private void EndDay()
     {
@@ -136,12 +125,10 @@ public class DiaryManager : MonoBehaviour
         GameManager.Instance.EndDay();
         supplySelectionPanel.GetComponent<SupplySelectionPanel>().FinalizeSupplySelection();
         investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
-        // 終了後、日記を閉じる or 次の日に備えて初期フェーズに戻す
         HideAllPanels();
         if (diaryPanel != null)
             diaryPanel.SetActive(false);
-
-        // フェーズをリセット
+        // フェーズを初期状態にリセット
         currentPhase = DiaryPhase.EventResult;
     }
 }
