@@ -84,9 +84,29 @@ public class SupplySelectionPanel : MonoBehaviour
 
     private void OnNextClicked()
     {
-        // 例: Nextボタン押下時に次のフェーズ（InvestigationSelection）へ進む
-        DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.InvestigationSelection);
+        // 調査中の家族がいるかチェック
+        if (InvestigationManager.Instance.IsAnyInvestigationActive())
+        {
+            // EventManager で今日のイベントがあるかどうか判定
+            if (EventManager.Instance.HasEventToday())
+            {
+                // イベントがある場合は EventPopup フェーズに遷移
+                DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.EventPopup);
+            }
+            else
+            {
+                // イベントがない場合は EndOfDay フェーズに遷移
+                DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.EndOfDay);
+            }
+        }
+        else
+        {
+            // 調査中の家族がいなければ、通常通り InvestigationSelection フェーズに遷移
+            DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.InvestigationSelection);
+        }
     }
+
+
 
     /// <summary>
     /// 各家族メンバーの各アイテムボタンを登録し、クリック時に ToggleItemSelection を呼ぶ

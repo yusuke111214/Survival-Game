@@ -5,7 +5,6 @@ public class FamilyManager : MonoBehaviour
 {
     public static FamilyManager Instance { get; private set; }
 
-    // Inspector で家族メンバー（FamilyMemberStatus コンポーネントを持つオブジェクト）を登録する
     [SerializeField] private List<FamilyMemberStatus> familyMembers = new List<FamilyMemberStatus>();
 
     void Awake()
@@ -13,15 +12,14 @@ public class FamilyManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            // シーン間で保持する場合は以下を有効に
-            // DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject); // 必要なら
         }
         else
         {
             Destroy(gameObject);
         }
     }
-
+    
     public FamilyMemberStatus GetRandomMember()
     {
         if (familyMembers == null || familyMembers.Count == 0)
@@ -32,7 +30,7 @@ public class FamilyManager : MonoBehaviour
         int index = Random.Range(0, familyMembers.Count);
         return familyMembers[index];
     }
-
+    
     public void SetRandomMemberInfectedEarly()
     {
         FamilyMemberStatus member = GetRandomMember();
@@ -52,7 +50,26 @@ public class FamilyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 家族の中で、父と母が両方死亡しているかを返す（リストの先頭2要素が父・母と仮定）
+    /// 家族メンバーの表示状態を更新する。死亡または調査中のメンバーは非表示にする。
+    /// </summary>
+    public void UpdateFamilyVisibility()
+    {
+        foreach (var member in familyMembers)
+        {
+            // 調査中の場合は常に非表示にする
+            if (member.IsDead || member.IsOnInvestigation)
+            {
+                member.gameObject.SetActive(false);
+            }
+            else
+            {
+                member.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 父と母が両方死亡しているかを返す（リストの先頭2要素が父・母と仮定）
     /// </summary>
     public bool IsFatherAndMotherDead()
     {
@@ -62,16 +79,5 @@ public class FamilyManager : MonoBehaviour
             return false;
         }
         return familyMembers[0].IsDead && familyMembers[1].IsDead;
-    }
-
-    /// <summary>
-    /// 家族メンバーの表示状態を更新する。死亡しているメンバーは非表示にする。
-    /// </summary>
-    public void UpdateFamilyVisibility()
-    {
-        foreach (var member in familyMembers)
-        {
-            member.gameObject.SetActive(!member.IsDead);
-        }
     }
 }

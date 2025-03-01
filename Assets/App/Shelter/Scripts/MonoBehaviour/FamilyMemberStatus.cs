@@ -28,6 +28,7 @@ public class FamilyMemberStatus : MonoBehaviour
     public bool IsDehydrated { get { return isDehydrated; } }
     public bool IsStarving { get { return isStarving; } }
     public bool IsDead { get { return isDead; } }
+    public bool IsOnInvestigation { get; set; } = false;
 
     /// <summary>
     /// デバッグ用・現在の状態を文字列にして返す。

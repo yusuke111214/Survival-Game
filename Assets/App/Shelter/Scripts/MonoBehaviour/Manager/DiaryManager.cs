@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class DiaryManager : MonoBehaviour
@@ -123,12 +125,12 @@ public class DiaryManager : MonoBehaviour
     {
         Debug.Log("一日が終了します。");
         GameManager.Instance.EndDay();
+        // SupplySelectionPanel, InvestigationPanel の確定処理を呼ぶ
         supplySelectionPanel.GetComponent<SupplySelectionPanel>().FinalizeSupplySelection();
         investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
         HideAllPanels();
         if (diaryPanel != null)
             diaryPanel.SetActive(false);
-        // フェーズを初期状態にリセット
-        currentPhase = DiaryPhase.EventResult;
+        currentPhase = DiaryPhase.EventResult; // 初期状態にリセット
     }
 }

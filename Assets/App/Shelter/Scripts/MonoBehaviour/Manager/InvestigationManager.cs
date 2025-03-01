@@ -26,8 +26,9 @@ public class InvestigationManager : MonoBehaviour
 
     public void StartInvestigation(FamilyMemberStatus member, ItemType? item)
     {
-        // キャラを非表示
+        // 調査開始時にメンバーを非表示、調査中フラグを設定
         member.gameObject.SetActive(false);
+        member.IsOnInvestigation = true;
 
         var data = new InvestigationData();
         data.member = member;
@@ -144,6 +145,22 @@ public class InvestigationManager : MonoBehaviour
         // キャラを再表示
         data.member.gameObject.SetActive(true);
 
+        // 調査から帰還したので、調査中フラグを解除し、メンバーを再表示
+        data.member.IsOnInvestigation = false;
+        data.member.gameObject.SetActive(true);
+
         Debug.Log($"{data.member.name} が調査から帰還。Water+{waterFound},Food+{foodFound}");
     }
+
+    public bool IsAnyInvestigationActive()
+    {
+        // activeInvestigations の中で isActive == true のものがあれば true を返す
+        foreach(var data in activeInvestigations)
+        {
+            if (data.isActive)
+                return true;
+        }
+        return false;
+    }
+
 }
