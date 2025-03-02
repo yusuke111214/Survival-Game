@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int gameClearDayThreshold = 30; // 調整可能な生存日数閾値
     [SerializeField] private float fadeDuration = 1.5f;        // フェード処理の時間
     [SerializeField] private float displayDuration = 2.0f;     // 日付表示を維持する時間
+    [SerializeField] private float endMessageFadeInDuration = 1.0f; // 終了メッセージのフェードイン時間
+    [SerializeField] private float endMessageDisplayDuration = 3.0f; // 終了メッセージの表示時間
 
     [Header("UI References")]
     [SerializeField] private Image fadePanel;                 // 画面全体を覆うフェード用Image（Canvas上に配置）
@@ -37,12 +40,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // シェルターシーン開始時に、暗転からフェードアウトして「○日目」を表示する
+        // シェルターシーン開始時に、暗幕と日付テキストのフェードアウト演出を実施
         StartCoroutine(BeginDayTransition());
     }
 
     /// <summary>
-    /// シーン開始時に呼ばれ、フェードアウト処理とともに「○日目」を表示する
+    /// シーン開始時に呼ばれ、暗幕と「○日目」テキストの両方をフェードアウトする
     /// </summary>
     private IEnumerator BeginDayTransition()
     {
@@ -52,20 +55,23 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        // フェードパネルをアクティブにして不透明にする
+        // 暗幕と日付テキストをアクティブにし、αを1に設定
         fadePanel.gameObject.SetActive(true);
+        dayText.gameObject.SetActive(true);
         Color panelColor = fadePanel.color;
         panelColor.a = 1f;
         fadePanel.color = panelColor;
+        Color textColor = dayText.color;
+        textColor.a = 1f;
+        dayText.color = textColor;
 
-        // 日付テキストを更新して表示
+        // 日付テキストを更新
         dayText.text = currentDay + "日目";
-        dayText.gameObject.SetActive(true);
 
         // 一定時間待機
         yield return new WaitForSeconds(displayDuration);
 
-        // フェードアウト（alpha:1→0）
+        // 暗幕と日付テキストのα値を同時にフェードアウト
         float elapsed = 0f;
         while (elapsed < fadeDuration)
         {
@@ -73,12 +79,13 @@ public class GameManager : MonoBehaviour
             float newAlpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
             panelColor.a = newAlpha;
             fadePanel.color = panelColor;
+            textColor.a = newAlpha;
+            dayText.color = textColor;
             yield return null;
         }
         panelColor.a = 0f;
         fadePanel.color = panelColor;
         fadePanel.gameObject.SetActive(false);
-        // 必要に応じてdayTextも非表示にする（またはそのまま表示する）
         dayText.gameObject.SetActive(false);
     }
 
@@ -90,76 +97,121 @@ public class GameManager : MonoBehaviour
         StartCoroutine(EndDayRoutine());
     }
 
-   private IEnumerator EndDayRoutine()
-   {
-      // フェードアウト（透明→黒へ）
-      yield return StartCoroutine(Fade(0f, 1f, fadeDuration));
+    private IEnumerator EndDayRoutine()
+    {
+        // まず、暗幕と日付テキストをアクティブにし、αを1に設定
+        fadePanel.gameObject.SetActive(true);
+        dayText.gameObject.SetActive(true);
+        Color panelColor = fadePanel.color;
+        panelColor.a = 1f;
+        fadePanel.color = panelColor;
+        Color textColor = dayText.color;
+        textColor.a = 1f;
+        dayText.color = textColor;
 
-      // 日付を更新
-      currentDay++;
-      if (dayText != null)
-      {
-         dayText.text = currentDay + "日目";
-         dayText.gameObject.SetActive(true);
-      }
+        // 日付更新
+        currentDay++;
+        dayText.text = currentDay + "日目";
 
+        // イベント決定、調査進捗、家族健康状態更新、家族表示更新など
         EventManager.Instance.DecideTodayEvent();
+        InvestigationManager.Instance.AdvanceDay();
+        FamilyManager.Instance.AdvanceDayForAll();
+        FamilyManager.Instance.UpdateFamilyVisibility();
 
-      // 調査管理の進捗更新
-      InvestigationManager.Instance.AdvanceDay();
+        // ゲームオーバー条件のチェック
+        if (FamilyManager.Instance.IsFatherAndMotherDead() || EventOutcomeProcessor.Instance.IsGameOverTriggered())
+        {
+            isGameOverOrClear = true;
+            yield return StartCoroutine(ShowEndMessageRoutine("Game Over"));
+            yield break;
+        }
 
-      // 一日の終了時に、すべての家族メンバーの健康状態を更新する
-    　FamilyManager.Instance.AdvanceDayForAll();
+        // ゲームクリア条件のチェック
+        if (currentDay >= gameClearDayThreshold && EventOutcomeProcessor.Instance.CheckGameClearConditions())
+        {
+            isGameOverOrClear = true;
+            yield return StartCoroutine(ShowEndMessageRoutine("Game Clear"));
+            yield break;
+        }
 
-      // 暗転中に家族の死亡状態を反映
-      FamilyManager.Instance.UpdateFamilyVisibility();
+        // 通常の日の終了処理：暗幕と日付テキストを同時にフェードアウト
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            panelColor.a = newAlpha;
+            fadePanel.color = panelColor;
+            textColor.a = newAlpha;
+            dayText.color = textColor;
+            yield return null;
+        }
+        panelColor.a = 0f;
+        fadePanel.color = panelColor;
+        fadePanel.gameObject.SetActive(false);
+        dayText.gameObject.SetActive(false);
 
-      // ゲームオーバー条件のチェック
-      if (FamilyManager.Instance.IsFatherAndMotherDead() || EventOutcomeProcessor.Instance.IsGameOverTriggered())
-      {
-         isGameOverOrClear = true;
-         if (endMessageText != null)
-         {
-               endMessageText.text = "Game Over";
-               endMessageText.gameObject.SetActive(true);
-         }
-         yield break; // 終了
-      }
-
-      // ゲームクリア条件のチェック
-      if (currentDay >= gameClearDayThreshold && EventOutcomeProcessor.Instance.CheckGameClearConditions())
-      {
-         isGameOverOrClear = true;
-         if (endMessageText != null)
-         {
-               endMessageText.text = "Game Clear";
-               endMessageText.gameObject.SetActive(true);
-         }
-         yield break;
-      }
-
-      // フェードイン（黒→透明）
-      yield return StartCoroutine(Fade(1f, 0f, fadeDuration));
-
-      // フェードイン完了後、日付テキストと終了メッセージを明示的に非表示にする
-      if (dayText != null)
-      {
-         dayText.text = "";
-         dayText.gameObject.SetActive(false);
-      }
-      if (endMessageText != null)
-         endMessageText.gameObject.SetActive(false);
-
-      Debug.Log("新しい一日が始まります。");
-   }
-
+        Debug.Log("新しい一日が始まります。");
+    }
 
     /// <summary>
-    /// フェード処理（alpha値を補間して画面をフェードさせる）
+    /// ゲームオーバーまたはゲームクリア時の演出を行うルーチン
+    /// 暗幕はそのまま不透明状態で維持し、日付テキストのみをフェードアウトしてから終了メッセージをフェードイン
+    /// </summary>
+    /// <param name="message">"Game Over" もしくは "Game Clear"</param>
+    private IEnumerator ShowEndMessageRoutine(string message)
+    {
+        // 暗幕はそのままα＝1で表示、日付テキストは表示中（α=1）
+        // まず、日付テキストをフェードアウト（暗幕は維持）
+        float elapsed = 0f;
+        Color textColor = dayText.color;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            textColor.a = newAlpha;
+            dayText.color = textColor;
+            yield return null;
+        }
+        dayText.gameObject.SetActive(false);
+
+        // 次に、終了メッセージのフェードイン
+        if (endMessageText != null)
+        {
+            endMessageText.text = message;
+            endMessageText.gameObject.SetActive(true);
+            Color msgColor = endMessageText.color;
+            msgColor.a = 0f;
+            endMessageText.color = msgColor;
+            float fadeElapsed = 0f;
+            while (fadeElapsed < endMessageFadeInDuration)
+            {
+                fadeElapsed += Time.deltaTime;
+                float t = fadeElapsed / endMessageFadeInDuration;
+                msgColor.a = Mathf.Lerp(0f, 1f, t);
+                endMessageText.color = msgColor;
+                yield return null;
+            }
+            msgColor.a = 1f;
+            endMessageText.color = msgColor;
+
+            // 一定時間表示
+            yield return new WaitForSeconds(endMessageDisplayDuration);
+
+            SceneManager.LoadScene("Start");
+        }
+        // 暗幕はそのまま表示（または必要ならここで処理）
+        yield break;
+    }
+
+    /// <summary>
+    /// フェード処理（alpha値を補間してfadePanelの色を変更する）
     /// </summary>
     private IEnumerator Fade(float startAlpha, float endAlpha, float duration)
     {
-        if (fadePanel == null) yield break;
+        if (fadePanel == null)
+            yield break;
         float elapsed = 0f;
         Color c = fadePanel.color;
         while (elapsed < duration)
@@ -188,6 +240,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameOverRoutine()
     {
+        // ゲームオーバーの場合、同様の演出を行う
         yield return StartCoroutine(Fade(0f, 1f, fadeDuration));
         if (dayText != null)
         {
@@ -216,6 +269,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator GameClearRoutine()
     {
+        // ゲームクリアの場合も同様の演出を行う
         yield return StartCoroutine(Fade(0f, 1f, fadeDuration));
         if (dayText != null)
         {

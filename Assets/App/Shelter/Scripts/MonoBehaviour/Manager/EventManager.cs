@@ -18,11 +18,15 @@ public class EventManager : MonoBehaviour
     // 現在のイベントタイプ (None = イベントなし)
     [SerializeField] private GameEventType currentEventType = GameEventType.None;
 
+    // 利用可能なイベントのリスト（すでに発生したイベントは除外する）
+    private List<GameEventType> availableEvents = new List<GameEventType>();
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            InitializeAvailableEvents();
         }
         else
         {
@@ -31,7 +35,23 @@ public class EventManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 現在のイベントに対応するEventTextDataを返す
+    /// 利用可能なイベントリストを初期化する。
+    /// None 以外のイベントを eventMappings から抽出する。
+    /// </summary>
+    private void InitializeAvailableEvents()
+    {
+        availableEvents.Clear();
+        foreach (var mapping in eventMappings)
+        {
+            if (mapping.eventType != GameEventType.None)
+            {
+                availableEvents.Add(mapping.eventType);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 現在のイベントに対応する EventTextData を返す
     /// </summary>
     public EventTextData GetCurrentEventData()
     {
@@ -51,22 +71,23 @@ public class EventManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 今日のイベントをランダムまたは何らかの条件で決定する
-    /// (呼び出しタイミングは、1日が始まるとき or EndDayの後など、設計次第)
+    /// 今日のイベントをランダムまたは条件により決定する
+    /// ※利用可能なイベントから選び、一度発生したイベントは再度選ばれないようにする
     /// </summary>
     public void DecideTodayEvent()
     {
-        // 例: 30% の確率で何かのイベントを発生させる
+        // 例: 30% の確率でイベントを発生させる
         float r = Random.value;
-        if (r < 0.3f)
+        if (r < 0.3f && availableEvents.Count > 0)
         {
-            // ここでは適当に eventMappings から1つ選ぶ
-            int idx = Random.Range(0, eventMappings.Count);
-            currentEventType = eventMappings[idx].eventType;
+            // 利用可能なイベントリストからランダムに選択
+            int idx = Random.Range(0, availableEvents.Count);
+            currentEventType = availableEvents[idx];
+            // 選ばれたイベントは以降選ばれないように削除
+            availableEvents.RemoveAt(idx);
         }
         else
         {
-            // イベントなし
             currentEventType = GameEventType.None;
         }
     }

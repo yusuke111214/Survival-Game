@@ -7850,8 +7850,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentDay: 1
   gameClearDayThreshold: 30
-  fadeDuration: 1.5
-  displayDuration: 2
+  fadeDuration: 3
+  displayDuration: 3
+  endMessageFadeInDuration: 2
+  endMessageDisplayDuration: 3
   fadePanel: {fileID: 1363594053}
   dayText: {fileID: 144446962}
   endMessageText: {fileID: 1815120623}
