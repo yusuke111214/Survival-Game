@@ -55,14 +55,27 @@ public class SupplySelectionPanel : MonoBehaviour
 
     void OnEnable()
     {
-        // (1) tempInventory の初期化：PlayerPlefs から在庫をコピー
+        // 各家族メンバーのUIで、調査中のメンバーは非表示にする
+        for (int i = 0; i < familyMembers.Length; i++)
+        {
+            if (familyMembers[i].status.IsOnInvestigation)
+            {
+                familyMembers[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                familyMembers[i].gameObject.SetActive(true);
+            }
+        }
+
+        // tempInventory の初期化
         tempInventory.Clear();
         foreach (ItemType t in System.Enum.GetValues(typeof(ItemType)))
         {
             tempInventory[t] = PlayerPlefs.Instance.GetItemCount(t);
         }
 
-        // (2) selectionState の再初期化：各家族メンバー×各アイテムのキーを必ず登録（未選択にする）
+        // selectionState の再初期化
         selectionState.Clear();
         for (int i = 0; i < familyMembers.Length; i++)
         {
@@ -72,7 +85,6 @@ public class SupplySelectionPanel : MonoBehaviour
             }
         }
 
-        // (3) ボタンの初期ビジュアル更新
         UpdateAllButtons();
     }
 

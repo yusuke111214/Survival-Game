@@ -140,7 +140,6 @@ public class DiaryManager : MonoBehaviour
     private void EndDay()
     {
         Debug.Log("一日が終了します。");
-        GameManager.Instance.EndDay();
         
         // SupplySelectionPanel, InvestigationPanel の確定処理を呼ぶ
         supplySelectionPanel.GetComponent<SupplySelectionPanel>().FinalizeSupplySelection();
@@ -150,6 +149,8 @@ public class DiaryManager : MonoBehaviour
         {
             investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
         }
+
+        GameManager.Instance.EndDay();
 
         EventOutcomeProcessor.Instance.ResetOutcomeText();
 

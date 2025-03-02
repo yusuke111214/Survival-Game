@@ -34,7 +34,7 @@ public class InvestigationManager : MonoBehaviour
         data.member = member;
         data.item = item;
         data.dayStarted = currentDay;
-        data.scheduledReturnDay = currentDay + Random.Range(3, 5); // 3～4日後
+        data.scheduledReturnDay = currentDay + Random.Range(3, 4); // 3～4日後
         data.isActive = true;
 
         activeInvestigations.Add(data);

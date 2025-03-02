@@ -37,6 +37,10 @@ public class FamilyMemberStatus : MonoBehaviour
     {
         if (isDead)
             return "死亡";
+
+        // 調査中の場合は「調査に行っている」と表示する
+        if (IsOnInvestigation)
+            return "調査中";
         
         string stateInfo = "";
         if (isThirsty)      stateInfo += "喉が乾いている\n";
@@ -136,7 +140,9 @@ public class FamilyMemberStatus : MonoBehaviour
     /// </summary>
     public void AdvanceDay()
     {
-        if (isDead) return;
+        // 調査中の場合は健康状態の更新をスキップする
+        if (isDead || IsOnInvestigation)
+            return;
 
         daysWithoutWater++;
         daysWithoutFood++;
@@ -177,11 +183,11 @@ public class FamilyMemberStatus : MonoBehaviour
     /// </summary>
     private void CheckDeath()
     {
-        if (isDehydrated && dehydrationDays >= 2)
+        if (isDehydrated && dehydrationDays >= 3)
         {
             isDead = true;
         }
-        if (isStarving && starvationDays >= 3)
+        if (isStarving && starvationDays >= 4)
         {
             isDead = true;
         }

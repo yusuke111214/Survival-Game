@@ -47,6 +47,10 @@ public class HealthSummaryText : MonoBehaviour
         if (status.IsDead)
             return name + "は死亡しています。";
 
+        // 調査中の場合は固定文言を返す
+        if (status.IsOnInvestigation)
+            return name + "は調査に行っている。";
+
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
         // 状態の優先順位は特に指定がないので、全状態を順に出力（各状態ごとに改行）
