@@ -2421,8 +2421,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 99.4
-  m_fontSizeBase: 99.4
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4259,7 +4259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5510,7 +5510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5702,26 +5702,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventMappings:
-  - eventType: 0
+  - eventType: 1
     eventData: {fileID: 11400000, guid: 455eafea7820ca34194ffe66d43c4769, type: 2}
-  - eventType: 5
-    eventData: {fileID: 11400000, guid: 853f28c0aa973df459f2dd7fc2b3fb37, type: 2}
-  - eventType: 9
-    eventData: {fileID: 11400000, guid: dfe5b8c160585f947aaf1991cdec4536, type: 2}
+  - eventType: 2
+    eventData: {fileID: 11400000, guid: 1d83ef0ad709da04cb625361d222b7c6, type: 2}
   - eventType: 3
+    eventData: {fileID: 11400000, guid: db59a08de26d3854883e6d8bee6a128c, type: 2}
+  - eventType: 4
     eventData: {fileID: 11400000, guid: 12bb74662270d63459cc7a40f0489eac, type: 2}
+  - eventType: 5
+    eventData: {fileID: 11400000, guid: ae1e25a06ba06da40a8c7f6375088d87, type: 2}
   - eventType: 6
+    eventData: {fileID: 11400000, guid: 853f28c0aa973df459f2dd7fc2b3fb37, type: 2}
+  - eventType: 7
     eventData: {fileID: 11400000, guid: 3746e2754a6387647a7490443db70c99, type: 2}
   - eventType: 8
-    eventData: {fileID: 11400000, guid: 3ca0d891e793daf4093cf9ecb34d94cd, type: 2}
-  - eventType: 2
-    eventData: {fileID: 11400000, guid: db59a08de26d3854883e6d8bee6a128c, type: 2}
-  - eventType: 1
-    eventData: {fileID: 11400000, guid: 1d83ef0ad709da04cb625361d222b7c6, type: 2}
-  - eventType: 4
-    eventData: {fileID: 11400000, guid: ae1e25a06ba06da40a8c7f6375088d87, type: 2}
-  - eventType: 7
     eventData: {fileID: 11400000, guid: 828d5eb6165edc54ea7d0f317e19fd3e, type: 2}
+  - eventType: 9
+    eventData: {fileID: 11400000, guid: 3ca0d891e793daf4093cf9ecb34d94cd, type: 2}
+  - eventType: 10
+    eventData: {fileID: 11400000, guid: dfe5b8c160585f947aaf1991cdec4536, type: 2}
+  - eventType: 0
+    eventData: {fileID: 11400000, guid: 455eafea7820ca34194ffe66d43c4769, type: 2}
   currentEventType: 0
 --- !u!4 &947134552
 Transform:
@@ -10165,26 +10167,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventMappings:
+  - eventType: 1
+    eventData: {fileID: 11400000, guid: 455eafea7820ca34194ffe66d43c4769, type: 2}
+  - eventType: 2
+    eventData: {fileID: 11400000, guid: 1d83ef0ad709da04cb625361d222b7c6, type: 2}
+  - eventType: 3
+    eventData: {fileID: 11400000, guid: db59a08de26d3854883e6d8bee6a128c, type: 2}
+  - eventType: 4
+    eventData: {fileID: 11400000, guid: 12bb74662270d63459cc7a40f0489eac, type: 2}
+  - eventType: 5
+    eventData: {fileID: 11400000, guid: ae1e25a06ba06da40a8c7f6375088d87, type: 2}
+  - eventType: 6
+    eventData: {fileID: 11400000, guid: 853f28c0aa973df459f2dd7fc2b3fb37, type: 2}
+  - eventType: 7
+    eventData: {fileID: 11400000, guid: 3746e2754a6387647a7490443db70c99, type: 2}
+  - eventType: 8
+    eventData: {fileID: 11400000, guid: 828d5eb6165edc54ea7d0f317e19fd3e, type: 2}
+  - eventType: 9
+    eventData: {fileID: 11400000, guid: 3ca0d891e793daf4093cf9ecb34d94cd, type: 2}
+  - eventType: 10
+    eventData: {fileID: 11400000, guid: dfe5b8c160585f947aaf1991cdec4536, type: 2}
   - eventType: 0
     eventData: {fileID: 11400000, guid: 455eafea7820ca34194ffe66d43c4769, type: 2}
-  - eventType: 1
-    eventData: {fileID: 11400000, guid: 1d83ef0ad709da04cb625361d222b7c6, type: 2}
-  - eventType: 2
-    eventData: {fileID: 11400000, guid: db59a08de26d3854883e6d8bee6a128c, type: 2}
-  - eventType: 3
-    eventData: {fileID: 11400000, guid: 12bb74662270d63459cc7a40f0489eac, type: 2}
-  - eventType: 4
-    eventData: {fileID: 11400000, guid: ae1e25a06ba06da40a8c7f6375088d87, type: 2}
-  - eventType: 5
-    eventData: {fileID: 11400000, guid: 853f28c0aa973df459f2dd7fc2b3fb37, type: 2}
-  - eventType: 6
-    eventData: {fileID: 11400000, guid: 3746e2754a6387647a7490443db70c99, type: 2}
-  - eventType: 7
-    eventData: {fileID: 11400000, guid: 828d5eb6165edc54ea7d0f317e19fd3e, type: 2}
-  - eventType: 8
-    eventData: {fileID: 11400000, guid: 3ca0d891e793daf4093cf9ecb34d94cd, type: 2}
-  - eventType: 9
-    eventData: {fileID: 11400000, guid: dfe5b8c160585f947aaf1991cdec4536, type: 2}
 --- !u!4 &1990535295
 Transform:
   m_ObjectHideFlags: 0

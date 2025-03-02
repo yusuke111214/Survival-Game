@@ -110,7 +110,23 @@ public class DiaryManager : MonoBehaviour
                 if (investigationPanel != null) investigationPanel.SetActive(true);
                 break;
             case DiaryPhase.EventPopup:
-                if (eventPopupPanel != null) eventPopupPanel.SetActive(true);
+                if (eventPopupPanel != null) 
+                {
+                    eventPopupPanel.SetActive(true);
+
+                    // EventPopupPanel スクリプトを取得
+                    var popup = eventPopupPanel.GetComponent<EventPopupPanel>();
+
+                    // EventManager から現在のイベントタイプ＆テキストを取得
+                    var currentEventType = EventManager.Instance.GetCurrentEventType(); 
+                    var currentData = EventManager.Instance.GetCurrentEventData();
+                    if (popup != null && currentData != null)
+                    {
+                        // "本日のイベント:\n" + currentData.prompt の形で渡す例
+                        string eventContent = "本日のイベント:\n" + currentData.prompt;
+                        popup.ShowEvent(currentEventType, eventContent);
+                    }
+                }
                 break;
             case DiaryPhase.EndOfDay:
                 EndDay();

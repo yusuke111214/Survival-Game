@@ -45,6 +45,11 @@ public class EventManager : MonoBehaviour
         return null;
     }
 
+    public GameEventType GetCurrentEventType()
+    {
+        return currentEventType;
+    }
+
     /// <summary>
     /// 今日のイベントをランダムまたは何らかの条件で決定する
     /// (呼び出しタイミングは、1日が始まるとき or EndDayの後など、設計次第)

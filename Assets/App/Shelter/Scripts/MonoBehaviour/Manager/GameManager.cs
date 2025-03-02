@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
          dayText.gameObject.SetActive(true);
       }
 
+        EventManager.Instance.DecideTodayEvent();
+
       // 調査管理の進捗更新
       InvestigationManager.Instance.AdvanceDay();
 
