@@ -16,12 +16,15 @@ public class EventOutcomeProcessor : MonoBehaviour
     [SerializeField] private List<EventMapping> eventMappings = new List<EventMapping>();
 
     // 最後のイベント結果テキストを記録する
-    public static string LastOutcomeText { get; private set; }
+    public static string LastOutcomeText { get; private set; } = "前日のイベント結果：特に異常はありません。";
 
     // 内部フラグ
     private bool gameOverTriggered = false;
     private bool governmentVaccineYesChosen = false;
     private bool infectedApproachNoChosen = false;
+
+    // イベントが発生していない日数
+    private int daysSinceLastEvent = 0;
 
     void Awake()
     {
@@ -50,10 +53,14 @@ public class EventOutcomeProcessor : MonoBehaviour
 
     public void ProcessEventOutcome(GameEventType eventType, bool choice)
     {
-        // マッピングから該当する EventTextData を取得
+        // イベントが発生した場合はカウンターをリセット
+        if (eventType != GameEventType.None)
+        {
+            daysSinceLastEvent = 0;
+        }
+
         EventTextData data = GetEventTextData(eventType);
         string baseText = (data != null) ? (choice ? data.yesOutcome : data.noOutcome) : "";
-        // 初期は baseText で初期化
         string outcomeText = baseText; 
 
         switch (eventType)
@@ -67,34 +74,32 @@ public class EventOutcomeProcessor : MonoBehaviour
                     if (affected != null)
                     {
                         affected.SetInfectedEarly(true);
-                        outcomeText = baseText + "\n" +
-                                      "食料+1, 水+1, " + affected.name + " が感染初期状態になりました。";
+                        outcomeText = baseText + "\n食料+1, 水+1, " + affected.name + " が感染初期状態になりました。";
                     }
                     else
                     {
-                        outcomeText = baseText + "\n" +
-                                      "食料+1, 水+1, しかし家族メンバーが選択できませんでした。";
+                        outcomeText = baseText + "\n食料+1, 水+1, しかし家族メンバーが選択できませんでした。";
                     }
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "何も起こりませんでした。";
+                    outcomeText = baseText + "\n何も起こりませんでした。";
                 }
                 break;
 
             case GameEventType.RadioBroadcastEvent:
-                outcomeText = baseText + "\n" + "無線放送を聞いても、特に変化はありませんでした。";
+                outcomeText = baseText + "\n無線放送を聞いても、特に変化はありませんでした。";
                 break;
 
             case GameEventType.PowerOutageEvent:
                 if (choice)
                 {
                     PlayerPlefs.Instance.AddItem(ItemType.Food, 1);
-                    outcomeText = baseText + "\n" + "食料が +1 補充されました。";
+                    outcomeText = baseText + "\n食料が +1 補充されました。";
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "停電に対して特に対策は講じず、変化はありませんでした。";
+                    outcomeText = baseText + "\n停電に対して特に対策は講じず、変化はありませんでした。";
                 }
                 break;
 
@@ -112,26 +117,26 @@ public class EventOutcomeProcessor : MonoBehaviour
                             if (Random.value < 0.5f)
                             {
                                 PlayerPlefs.Instance.AddItem(ItemType.Gauze, -1);
-                                outcomeText = baseText + "\n" + "ガーゼが 1 消費され、";
+                                outcomeText = baseText + "\nガーゼが 1 消費され、";
                                 itemUsed = true;
                             }
                             else
                             {
                                 PlayerPlefs.Instance.AddItem(ItemType.Syringe, -1);
-                                outcomeText = baseText + "\n" + "注射器が 1 消費され、";
+                                outcomeText = baseText + "\n注射器が 1 消費され、";
                                 itemUsed = true;
                             }
                         }
                         else if (gauzeCount > 0)
                         {
                             PlayerPlefs.Instance.AddItem(ItemType.Gauze, -1);
-                            outcomeText = baseText + "\n" + "ガーゼが 1 消費され、";
+                            outcomeText = baseText + "\nガーゼが 1 消費され、";
                             itemUsed = true;
                         }
                         else
                         {
                             PlayerPlefs.Instance.AddItem(ItemType.Syringe, -1);
-                            outcomeText = baseText + "\n" + "注射器が 1 消費され、";
+                            outcomeText = baseText + "\n注射器が 1 消費され、";
                             itemUsed = true;
                         }
                     }
@@ -143,12 +148,12 @@ public class EventOutcomeProcessor : MonoBehaviour
                     else
                     {
                         PlayerPlefs.Instance.AddItem(ItemType.Water, 2);
-                        outcomeText = baseText + "\n" + "保護用アイテムが不足していたため、水が +2 補充されました。";
+                        outcomeText = baseText + "\n保護用アイテムが不足していたため、水が +2 補充されました。";
                     }
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "感染の危険を感じ、慎重に行動したため、変化はありませんでした。";
+                    outcomeText = baseText + "\n感染の危険を感じ、慎重に行動したため、変化はありませんでした。";
                 }
                 break;
 
@@ -168,13 +173,13 @@ public class EventOutcomeProcessor : MonoBehaviour
                     if (medKitCount <= 0)
                     {
                         PlayerPlefs.Instance.AddItem(ItemType.MedicalKit, 1);
-                        outcomeText = baseText + "\n" + "医療キットが +1 追加されました。";
+                        outcomeText = baseText + "\n医療キットが +1 追加されました。";
                     }
                     else
                     {
                         PlayerPlefs.Instance.AddItem(ItemType.Gauze, 1);
                         PlayerPlefs.Instance.AddItem(ItemType.Syringe, 1);
-                        outcomeText = baseText + "\n" + "ガーゼと注射器がそれぞれ +1 追加されました。";
+                        outcomeText = baseText + "\nガーゼと注射器がそれぞれ +1 追加されました。";
                     }
                 }
                 break;
@@ -189,7 +194,7 @@ public class EventOutcomeProcessor : MonoBehaviour
                     {
                         PlayerPlefs.Instance.AddItem(ItemType.Syringe, -1);
                         PlayerPlefs.Instance.AddItem(ItemType.Gauze, -1);
-                        outcomeText = baseText + "\n" + "注射器とガーゼが 1 個ずつ消費されました。";
+                        outcomeText = baseText + "\n注射器とガーゼが 1 個ずつ消費されました。";
                     }
                     else
                     {
@@ -203,17 +208,17 @@ public class EventOutcomeProcessor : MonoBehaviour
                         {
                             ItemType randomType = availableTypes[Random.Range(0, availableTypes.Count)];
                             PlayerPlefs.Instance.AddItem(randomType, -2);
-                            outcomeText = baseText + "\n" + "ランダムなアイテム（" + randomType.ToString() + "）が 2 個消費されました。";
+                            outcomeText = baseText + "\nランダムなアイテム（" + randomType.ToString() + "）が 2 個消費されました。";
                         }
                         else
                         {
-                            outcomeText = baseText + "\n" + "必要な物資が不足しており、何も変化はありませんでした。";
+                            outcomeText = baseText + "\n必要な物資が不足しており、何も変化はありませんでした。";
                         }
                     }
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "政府の要請には応じず、変化はありませんでした。";
+                    outcomeText = baseText + "\n政府の要請には応じず、変化はありませんでした。";
                 }
                 break;
 
@@ -222,24 +227,24 @@ public class EventOutcomeProcessor : MonoBehaviour
                 {
                     PlayerPlefs.Instance.AddItem(ItemType.Syringe, 1);
                     PlayerPlefs.Instance.AddItem(ItemType.Gauze, 1);
-                    outcomeText = baseText + "\n" + "注射器とガーゼがそれぞれ +1 追加されました。";
+                    outcomeText = baseText + "\n注射器とガーゼがそれぞれ +1 追加されました。";
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "内部対立への介入を見送ったため、変化はありませんでした。";
+                    outcomeText = baseText + "\n内部対立への介入を見送ったため、変化はありませんでした。";
                 }
                 break;
 
             case GameEventType.VisitorArrivalEvent:
                 if (choice)
                 {
-                    outcomeText = baseText + "\n" + "訪問者の出現により、シェルターは混乱に陥り、ゲームオーバーとなりました。";
+                    outcomeText = baseText + "\n訪問者の出現により、シェルターは混乱に陥り、ゲームオーバーとなりました。";
                     gameOverTriggered = true;
                     GameManager.Instance.GameOver();
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "訪問者には接触せず、変化はありませんでした。";
+                    outcomeText = baseText + "\n訪問者には接触せず、変化はありませんでした。";
                 }
                 break;
 
@@ -256,16 +261,16 @@ public class EventOutcomeProcessor : MonoBehaviour
                     {
                         ItemType randomType = availableTypes[Random.Range(0, availableTypes.Count)];
                         PlayerPlefs.Instance.AddItem(randomType, -2);
-                        outcomeText = baseText + "\n" + "ランダムなアイテム（" + randomType.ToString() + "）が 2 個消費されました。";
+                        outcomeText = baseText + "\nランダムなアイテム（" + randomType.ToString() + "）が 2 個消費されました。";
                     }
                     else
                     {
-                        outcomeText = baseText + "\n" + "消費できる物資がなかったため、変化はありませんでした。";
+                        outcomeText = baseText + "\n消費できる物資がなかったため、変化はありませんでした。";
                     }
                 }
                 else
                 {
-                    outcomeText = baseText + "\n" + "医療情報の精査を見送り、変化はありませんでした。";
+                    outcomeText = baseText + "\n医療情報の精査を見送り、変化はありませんでした。";
                 }
                 break;
 
@@ -282,7 +287,7 @@ public class EventOutcomeProcessor : MonoBehaviour
                 else
                 {
                     PlayerPlefs.Instance.AddItem(ItemType.Water, 2);
-                    outcomeText = baseText + "\n" + "水が +2 補充されました。";
+                    outcomeText = baseText + "\n水が +2 補充されました。";
                 }
                 break;
         }
@@ -290,9 +295,6 @@ public class EventOutcomeProcessor : MonoBehaviour
         Debug.Log("イベント結果: " + outcomeText);
     }
 
-    /// <summary>
-    /// Inspector で登録したマッピングから、指定したイベントタイプに対応する EventTextData を返す
-    /// </summary>
     private EventTextData GetEventTextData(GameEventType eventType)
     {
         foreach (var mapping in eventMappings)
@@ -301,5 +303,23 @@ public class EventOutcomeProcessor : MonoBehaviour
                 return mapping.eventData;
         }
         return null;
+    }
+
+    /// <summary>
+    /// 1日が経過し、イベントが発生していなければ結果テキストを初期状態にリセットする。
+    /// </summary>
+    public void ResetOutcomeText()
+    {
+        // AdvanceDay() などで毎日カウンターをインクリメントするか、
+        // EndDay() 呼び出し時にこのメソッドを呼び出す前に
+        // daysSinceLastEvent を増加させる
+        daysSinceLastEvent++;
+
+        // もし2日以上イベントがなかったなら、初期テキストにリセット
+        if (daysSinceLastEvent >= 2)
+        {
+            LastOutcomeText = "前日のイベント結果：特に異常はありません。";
+            daysSinceLastEvent = 0;
+        }
     }
 }

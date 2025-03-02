@@ -92,7 +92,7 @@ public class DiaryManager : MonoBehaviour
                 if (eventDiaryText != null && eventResultTextComponent != null)
                 {
                     eventDiaryText.gameObject.SetActive(true);
-                    eventDiaryText.text = "[前日のイベント結果]\n" + eventResultTextComponent.GetText();
+                    eventDiaryText.text = eventResultTextComponent.GetText();
                 }
                 break;
             case DiaryPhase.HealthSummary:
@@ -150,6 +150,8 @@ public class DiaryManager : MonoBehaviour
         {
             investigationPanel.GetComponent<InvestigationSelectionPanel>().FinalizeInvestigationChoice();
         }
+
+        EventOutcomeProcessor.Instance.ResetOutcomeText();
 
         HideAllPanels();
         if (diaryPanel != null)
