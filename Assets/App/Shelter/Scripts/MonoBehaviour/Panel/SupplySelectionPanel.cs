@@ -10,6 +10,7 @@ public class SupplySelectionPanel : MonoBehaviour
     [Header("Button")]
     [SerializeField] private Button backButton;
     [SerializeField] private Button nextButton;
+    [SerializeField] private AudioClip buttonSound;
 
     // アイテムの種類一覧
     private readonly ItemType[] itemTypes = {
@@ -90,12 +91,16 @@ public class SupplySelectionPanel : MonoBehaviour
 
     private void OnBackClicked()
     {
+
+        AudioSource.PlayClipAtPoint(buttonSound, transform.position, 2f);
         // 例: Backボタン押下時に日記の HealthSummary フェーズへ戻す
         DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.HealthSummary);
     }
 
     private void OnNextClicked()
     {
+        AudioSource.PlayClipAtPoint(buttonSound, transform.position, 2f);
+
         // 調査中の家族がいるかチェック
         if (InvestigationManager.Instance.IsAnyInvestigationActive())
         {
@@ -142,6 +147,8 @@ public class SupplySelectionPanel : MonoBehaviour
         bool current = selectionState[(memberIndex, itemType)];
         if (current)
         {
+            AudioSource.PlayClipAtPoint(buttonSound, transform.position);
+
             // 選択解除：状態を false に戻し、在庫カウンタを元に戻す
             selectionState[(memberIndex, itemType)] = false;
             tempInventory[itemType] += 1;
@@ -151,6 +158,7 @@ public class SupplySelectionPanel : MonoBehaviour
             // 在庫がない場合は選択しない
             if (tempInventory[itemType] <= 0) return;
 
+            AudioSource.PlayClipAtPoint(buttonSound, transform.position);
             // 選択する場合：状態を true にし、在庫カウンタを減らす
             selectionState[(memberIndex, itemType)] = true;
             tempInventory[itemType] -= 1;

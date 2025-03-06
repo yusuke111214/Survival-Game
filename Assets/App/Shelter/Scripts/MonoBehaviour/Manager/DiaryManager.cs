@@ -30,6 +30,9 @@ public class DiaryManager : MonoBehaviour
     [SerializeField] private HealthSummaryText healthSummaryTextComponent;
     [SerializeField] private EventText eventTextComponent;
 
+    [Header("Diary Sound")]
+    [SerializeField] private AudioClip diarySound;
+
     private DiaryPhase currentPhase = DiaryPhase.EventResult;
 
     public static DiaryManager Instance { get; private set; }
@@ -64,6 +67,7 @@ public class DiaryManager : MonoBehaviour
     /// </summary>
     public void ShowDiary()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position);
         if (diaryPanel != null)
             diaryPanel.SetActive(true);
         SetPhase(DiaryPhase.EventResult);

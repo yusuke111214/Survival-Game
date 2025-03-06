@@ -10,6 +10,7 @@ public class EventPopupPanel : MonoBehaviour
     [SerializeField] private Button noButton;              // ×ボタン
     [SerializeField] private Button backButton;
     [SerializeField] private Button nextButton;
+    [SerializeField] private AudioClip diarySound;
 
     // 内部定数：選択状態のα値
     private const float ALPHA_SELECTED = 1f;
@@ -47,18 +48,24 @@ public class EventPopupPanel : MonoBehaviour
 
     private void OnYesButtonClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);
+
         userChoice = true;
         UpdateUI();
     }
 
     private void OnNoButtonClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);
+
         userChoice = false;
         UpdateUI();
     }
 
     private void OnNextButtonClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);
+
         if (userChoice == null)
         {
             Debug.LogWarning("選択が行われていません。");
@@ -73,6 +80,8 @@ public class EventPopupPanel : MonoBehaviour
 
     private void OnBackButtonClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);
+
         DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.InvestigationSelection);
     }
 

@@ -32,6 +32,9 @@ public class InvestigationSelectionPanel : MonoBehaviour
     [SerializeField] private Button backButton;
     [SerializeField] private Button nextButton;
 
+    [Header("Diary Sound")]
+    [SerializeField] private AudioClip diarySound;
+
     // 内部状態
     private int selectedMemberIndex = -1;    // 0=父,1=母,2=息子, -1=未選択
     private List<ItemType> possibleItems = new List<ItemType>();
@@ -167,12 +170,16 @@ public class InvestigationSelectionPanel : MonoBehaviour
 
     private void OnBackClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);     
+
         // 例: Backで SupplySelection に戻る
         DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.SupplySelection);
     }
 
     private void OnNextClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 2f);
+
         // 調査するかしないかのチェックなどを行い、
         // イベントがあるなら EventPopup、ないなら EndOfDay
         bool hasEvent = EventManager.Instance.HasEventToday();

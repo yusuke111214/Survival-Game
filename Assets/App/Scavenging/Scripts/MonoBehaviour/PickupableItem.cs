@@ -4,6 +4,7 @@ public class PickupableItem : MonoBehaviour
 {
     [SerializeField] private Outline outline;
     [SerializeField] private ItemType itemType;
+    [SerializeField] private AudioClip pickupSound;
 
     private bool isPlayerNear = false;
 
@@ -44,6 +45,7 @@ public class PickupableItem : MonoBehaviour
             // アイテムを拾おうとする。預けるまでは PlayerPlefs に保存しない
             if (InventoryManager.Instance.TryPickup(itemType))
             {
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
                 PickUp();
             }
             else

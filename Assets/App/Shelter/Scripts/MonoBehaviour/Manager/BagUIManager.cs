@@ -7,6 +7,7 @@ public class BagUIManager : MonoBehaviour
     [SerializeField] private GameObject bagOverlayPanel; // オーバーレイパネル
     [SerializeField] private Button bagButton;           // 右上のかばんボタン
     [SerializeField] private Button closeButton;         // オーバーレイの閉じるボタン
+    [SerializeField] private AudioClip bagOpenSound;     // かばんを開く音
 
     [Header("Item Entry UI")]
     [SerializeField] private ItemEntryUI entryWater;
@@ -27,6 +28,9 @@ public class BagUIManager : MonoBehaviour
 
     private void ShowBagOverlay()
     {
+        if (bagOpenSound != null)
+            AudioSource.PlayClipAtPoint(bagOpenSound, transform.position, 5f);
+
         bagOverlayPanel.SetActive(true);
         UpdateItemEntry(entryWater, ItemType.Water);
         UpdateItemEntry(entryFood, ItemType.Food);
@@ -40,6 +44,9 @@ public class BagUIManager : MonoBehaviour
 
     private void HideBagOverlay()
     {
+        if (bagOpenSound != null)
+            AudioSource.PlayClipAtPoint(bagOpenSound, transform.position, 5f);
+
         bagOverlayPanel.SetActive(false);
     }
 

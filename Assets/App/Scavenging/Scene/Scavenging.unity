@@ -222,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 14820719}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &14820718
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -426,6 +427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 0}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &54271254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,6 +816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 67054550}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &67054550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -953,6 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 73650120}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &73650119
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1044,6 +1048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 77052062}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &77052062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2019,6 +2024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 154861699}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &154861698
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2444,6 +2450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 168989704}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &168989703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2870,6 +2877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 208296380}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &208296380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,6 +3118,7 @@ GameObject:
   - component: {fileID: 222620377}
   - component: {fileID: 222620376}
   - component: {fileID: 222620380}
+  - component: {fileID: 222620381}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3220,6 +3229,105 @@ MonoBehaviour:
   totalTime: 60
   clockHand: {fileID: 523010834}
   redArcImage: {fileID: 1457986414}
+  audioSource: {fileID: 222620381}
+  tickingSound: {fileID: 8300000, guid: d743422ecc2445a4db0dd0914c320274, type: 3}
+  alarmSound: {fileID: 8300000, guid: 8c96002caff3fa8459f8a3bfe59a7259, type: 3}
+--- !u!82 &222620381
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222620375}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.16
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &222779077
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,6 +3533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 239216325}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &239216324
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3564,6 +3673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 245839903}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &245839902
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3703,6 +3813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 246118715}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &246118714
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3842,6 +3953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 247321019}
   itemType: 3
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &247321019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4491,6 +4603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 268136206}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &268136205
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4630,6 +4743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 270437975}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &270437975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4800,6 +4914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 278220620}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &278220619
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5184,6 +5299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 300787851}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &300787851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5678,6 +5794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 360509778}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &360509777
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6286,6 +6403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 412182074}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &412182073
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7046,6 +7164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 466238332}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &466238331
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7268,6 +7387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 469571185}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &469571184
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7678,6 +7798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 484540440}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &484540439
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7900,6 +8021,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 520787944}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &520787943
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8316,6 +8438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 529566246}
   itemType: 3
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &529566246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9501,6 +9624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 614334041}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &614334040
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10494,6 +10618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 710069333}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &710069332
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10901,6 +11026,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 718960561}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &718960561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11148,6 +11274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 738741335}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &738741335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12371,6 +12498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 847112967}
   itemType: 1
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!1 &880736153
 GameObject:
   m_ObjectHideFlags: 0
@@ -12471,6 +12599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 880736160}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &880736159
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12606,6 +12735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 884391196}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &884391196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13387,6 +13517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 928296110}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &928296109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13776,6 +13907,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 949404473}
   itemType: 1
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!1 &952701330
 GameObject:
   m_ObjectHideFlags: 0
@@ -14271,6 +14403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 984180752}
   itemType: 5
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &984180752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14576,6 +14709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 992281243}
   itemType: 3
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &992281243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14715,6 +14849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 998498916}
   itemType: 4
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &998498916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15088,6 +15223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1038779370}
   itemType: 5
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1038779370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15958,6 +16094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1120782626}
   itemType: 1
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!1 &1138425233
 GameObject:
   m_ObjectHideFlags: 0
@@ -16172,6 +16309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1166227703}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &1166227702
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16263,6 +16401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1180202232}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1180202232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16402,6 +16541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1191443346}
   itemType: 5
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1191443346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17759,6 +17899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1353976612}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &1353976611
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18848,6 +18989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1443843192}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1443843192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19092,6 +19234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1445062218}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1445062218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19231,6 +19374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1446014612}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &1446014611
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19855,6 +19999,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 0}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1492896330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19994,6 +20139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1493010501}
   itemType: 5
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1493010501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20565,6 +20711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1535723195}
   itemType: 4
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1535723195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20704,6 +20851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1536198798}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &1536198797
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20937,8 +21085,7 @@ Transform:
   m_LocalPosition: {x: 6.172212, y: 2.7229462, z: -9.409745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1966595121}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1565996350
@@ -21744,6 +21891,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1611223728}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &1611223727
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22325,6 +22473,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1666950681}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1666950681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22958,6 +23107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1725415950}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1725415950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24686,6 +24836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1871019368}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1871019368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24860,6 +25011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1881373089}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1881373089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25189,6 +25341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1906520165}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1906520165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25328,6 +25481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1918560078}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1918560078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25630,6 +25784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 1942658545}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &1942658545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25694,12 +25849,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966595120}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 6.172212, y: 2.7229462, z: -9.409745}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1559041755}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1966595122
 AudioSource:
@@ -25713,13 +25868,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 8ec39a5a3a12eaa4691a6fae8bec413a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.4
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 215
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -26359,6 +26514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2016805748}
   itemType: 3
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &2016805748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26603,6 +26759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2053194795}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &2053194795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26694,6 +26851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2056114729}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &2056114729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27004,6 +27162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2113879905}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &2113879904
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29410,6 +29569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2071128148152937935}
   itemType: 6
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &2071128148152937935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29702,6 +29862,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 2375337430475439331}
   itemType: 3
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &2375337430475439331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31867,6 +32028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 4111824707178391636}
   itemType: 7
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &4111824707178391636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31967,6 +32129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 4119069163161366251}
   itemType: 2
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &4119069163161366251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32262,6 +32425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 4351979424858034135}
   itemType: 5
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &4351979424858034135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32339,6 +32503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 4480241391274368085}
   itemType: 0
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!65 &4480241391274368084
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36233,6 +36398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 8858447768765069555}
   itemType: 1
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!1 &8871342587599279906
 GameObject:
   m_ObjectHideFlags: 0
@@ -36602,6 +36768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outline: {fileID: 9065569935748264290}
   itemType: 4
+  pickupSound: {fileID: 8300000, guid: ed6b3f245bcbe374a85d6a01da46aae3, type: 3}
 --- !u!114 &9065569935748264290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36853,6 +37020,7 @@ SceneRoots:
   - {fileID: 1160085308}
   - {fileID: 594905819}
   - {fileID: 1559041755}
+  - {fileID: 1966595121}
   - {fileID: 615123452}
   - {fileID: 1806635194}
   - {fileID: 1411981017}

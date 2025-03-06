@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class EventResultPanel : MonoBehaviour
 {
     [SerializeField] private Button nextButton;
+    [SerializeField] private AudioClip diarySound;
 
     void Start()
     {
@@ -16,6 +17,8 @@ public class EventResultPanel : MonoBehaviour
 
     private void OnNextClicked()
     {
+        AudioSource.PlayClipAtPoint(diarySound, transform.position, 10f);
+
         // 次のフェーズへ
         DiaryManager.Instance.SetPhase(DiaryManager.DiaryPhase.HealthSummary);
     }

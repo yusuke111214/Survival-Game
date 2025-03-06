@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class ItemPickupManager : MonoBehaviour
 {
     [SerializeField] private float pickupRadius = 2f;
+    [SerializeField] private AudioClip pickupSound;
+
     private List<PickupableItem> nearbyItems = new List<PickupableItem>();
 
     void Update()
@@ -32,6 +34,7 @@ public class ItemPickupManager : MonoBehaviour
         // 3. クリックで最も近いアイテムを拾う
         if (Input.GetMouseButtonDown(0) && closest != null && closestDist <= pickupRadius)
         {
+            AudioSource.PlayClipAtPoint(pickupSound, transform.position);
             closest.PickUp();
             nearbyItems.Remove(closest);
         }
