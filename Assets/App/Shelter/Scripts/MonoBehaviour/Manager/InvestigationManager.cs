@@ -90,11 +90,11 @@ public class InvestigationManager : MonoBehaviour
         bool survived = true; // 例: item==Hammer なら 90% で生存, else 70% ...
         if (data.item == ItemType.Hammer)
         {
-            survived = (Random.value < 0.9f);
+            survived = Random.value < 0.9f;
         }
         else
         {
-            survived = (Random.value < 0.7f);
+            survived = Random.value < 0.8f;
         }
 
         if (!survived)
@@ -116,10 +116,10 @@ public class InvestigationManager : MonoBehaviour
         if (data.item == ItemType.Book)
         {
             // 例: 50%で Gauze +1
-            if (Random.value < 0.5f)
+            if (Random.value < 0.6f)
                 PlayerPlefs.Instance.AddItem(ItemType.Gauze, 1);
             // 30%で Syringe +1
-            if (Random.value < 0.3f)
+            if (Random.value < 0.4f)
                 PlayerPlefs.Instance.AddItem(ItemType.Syringe, 1);
         }
 

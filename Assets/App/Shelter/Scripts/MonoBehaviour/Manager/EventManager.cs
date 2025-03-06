@@ -78,7 +78,7 @@ public class EventManager : MonoBehaviour
     {
         // 例: 30% の確率でイベントを発生させる
         float r = Random.value;
-        if (r < 0.3f && availableEvents.Count > 0)
+        if (r < 0.4f && availableEvents.Count > 0)
         {
             // 利用可能なイベントリストからランダムに選択
             int idx = Random.Range(0, availableEvents.Count);

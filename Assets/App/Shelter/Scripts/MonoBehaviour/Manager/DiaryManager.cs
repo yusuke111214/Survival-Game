@@ -68,8 +68,10 @@ public class DiaryManager : MonoBehaviour
     public void ShowDiary()
     {
         AudioSource.PlayClipAtPoint(diarySound, transform.position);
+
         if (diaryPanel != null)
             diaryPanel.SetActive(true);
+            
         SetPhase(DiaryPhase.EventResult);
     }
 
